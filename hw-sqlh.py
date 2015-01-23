@@ -1,0 +1,28 @@
+__author__ = 'phil'
+
+import _sqlite3
+
+with _sqlite3.connect("cars.db") as connection:
+    c = connection.cursor()
+
+    # retrieve data
+    c.execute("SELECT * FROM inventory")
+
+    # fetchall() retrieves all records from the query
+    rows = c.fetchall()
+
+    # output the rows to the screen, row by row
+    for r in rows:
+
+        #output the car make, model and quantity to the screen
+        print r[0], r[1], "\n", r[2]
+
+        # retrieve order_date for the current car make and model
+        c.execute("SELECT count(order_date) FROM orders WHERE make=? and model=?", (r[0], r[1]))
+
+        # fetchone() retrieves one record from the query
+        order_count = c.fetchone()[0]
+
+        # output the order count to the screen
+        print order_count
+        print "\n"
